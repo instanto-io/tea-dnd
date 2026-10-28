@@ -154,9 +154,13 @@ has been verified in this alpha.
 
 The browser contracts exercise moving between vertical panels, reordering, restoring a rejected
 move, editing controls inside a card and disabling dragging. Both showcases compile the same
-Java application and run the same browser tests.
+Java application and run the same browser tests. Mouse dragging is checked in Chromium and
+WebKit; single-finger touch dragging is checked with Chromium’s browser input emulation.
+Physical iOS and Android devices have not yet been verified.
 
-The inherited mouse and touch paths remain. Keyboard dragging and a modern Pointer Events
+Use one finger on the drag handle for touch dragging. Give custom handles `touch-action: none`
+in CSS so the browser does not take over the gesture for scrolling; the showcase already does
+this. Multi-finger dragging is not supported. Keyboard dragging and a modern Pointer Events
 implementation are not included. Legacy IE and Opera strategies now use standard browser behavior;
 those obsolete browsers are not supported. This is widget movement within a page, not operating
 system file drag-and-drop.

@@ -276,7 +276,7 @@ public class DOMUtil {
     }
   }
 
-  public static native NativeEvent createTouchEndEvent(
+  public static NativeEvent createTouchEndEvent(
       boolean bubbles,
       boolean cancelable,
       int detail,
@@ -284,11 +284,39 @@ public class DOMUtil {
       boolean altKey,
       boolean shiftKey,
       boolean metaKey,
-      JsArray<Touch> changedTouches) /*-{
-    var evt = $doc.createEvent('TouchEvent');
-    var view = null;
-    evt.initUIEvent("touchend", bubbles, cancelable, view, detail);
-    evt.changedTouches = changedTouches;
+      JsArray<Touch> changedTouches) {
+    return createTouchEndEventNative(
+        bubbles, cancelable, detail, ctrlKey, altKey, shiftKey, metaKey, changedTouches);
+  }
+
+  // Use the common overlay boundary so TeaVM unwraps the native TouchList too.
+  private static native NativeEvent createTouchEndEventNative(
+      boolean bubbles,
+      boolean cancelable,
+      int detail,
+      boolean ctrlKey,
+      boolean altKey,
+      boolean shiftKey,
+      boolean metaKey,
+      com.google.gwt.core.client.JavaScriptObject changedTouches) /*-{
+    var changed = Array.prototype.slice.call(changedTouches || []);
+    var options = {bubbles: bubbles, cancelable: cancelable, detail: detail, view: $wnd,
+      ctrlKey: ctrlKey, altKey: altKey, shiftKey: shiftKey, metaKey: metaKey,
+      touches: [], targetTouches: [], changedTouches: changed};
+    if (typeof $wnd.TouchEvent === "function") {
+      try {
+        return new $wnd.TouchEvent("touchend", options);
+      } catch (ignored) {
+        // Some browsers expose TouchEvent but do not allow constructing it.
+      }
+    }
+    var evt = $doc.createEvent("UIEvent");
+    evt.initUIEvent("touchend", bubbles, cancelable, $wnd, detail);
+    Object.defineProperties(evt, {
+      touches: {value: []}, targetTouches: {value: []}, changedTouches: {value: changed},
+      ctrlKey: {value: ctrlKey}, altKey: {value: altKey},
+      shiftKey: {value: shiftKey}, metaKey: {value: metaKey}
+    });
     return evt;
   }-*/;
 }

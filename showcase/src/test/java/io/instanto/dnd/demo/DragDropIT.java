@@ -2,6 +2,8 @@ package io.instanto.dnd.demo;
 
 import static org.junit.Assert.*;
 import com.microsoft.playwright.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.microsoft.playwright.options.BoundingBox;
 import com.sun.net.httpserver.HttpServer;
 import java.net.InetSocketAddress;
@@ -13,9 +15,10 @@ import org.junit.runners.Parameterized;
 
 @RunWith(Parameterized.class)
 public class DragDropIT {
-  @Parameterized.Parameters(name="{0}")
-  public static Object[] engines() { return new Object[]{"chromium", "webkit"}; }
-  @Parameterized.Parameter public String engine;
+  @Parameterized.Parameters(name="{0}-touch={1}")
+  public static Object[][] engines() { return new Object[][]{{"chromium", false}, {"webkit", false}, {"chromium", true}}; }
+  @Parameterized.Parameter(0) public String engine;
+  @Parameterized.Parameter(1) public boolean touchInput;
   private HttpServer server;
   private Playwright playwright;
   private Browser browser;
@@ -37,11 +40,14 @@ public class DragDropIT {
     server.start();
     playwright = Playwright.create();
     browser = (engine.equals("chromium") ? playwright.chromium() : playwright.webkit()).launch(new BrowserType.LaunchOptions().setTimeout(20000));
-    page=browser.newPage(new Browser.NewPageOptions().setViewportSize(1100,900));
+    page=browser.newPage(new Browser.NewPageOptions().setViewportSize(1100,900).setHasTouch(touchInput));
     page.setDefaultTimeout(7000);
     page.onPageError(errors::add);
     page.navigate("http://127.0.0.1:"+server.getAddress().getPort()+"/");
     page.waitForSelector("#demo[data-ready=true]");
+    if (touchInput) {
+      page.locator("#alpha-handle").evaluate("el => el.addEventListener('touchend', e => { if (!e.isTrusted) el.dataset.forwardedTouches = e.changedTouches.length + ':' + e.touches.length; })");
+    }
   }
   @After public void stop() {
     if(page!=null && !errors.isEmpty()) System.err.println(errors);
@@ -52,13 +58,41 @@ public class DragDropIT {
   private void drag(String source, String target, double yOffset) {
     BoundingBox a=page.locator(source).boundingBox();
     BoundingBox b=page.locator(target).boundingBox();
-    page.mouse().move(a.x+a.width/2,a.y+a.height/2);
-    page.mouse().down();
-    page.mouse().move(a.x+a.width/2+12,a.y+a.height/2+12,new Mouse.MoveOptions().setSteps(3));
-    page.mouse().move(b.x+b.width/2,b.y+yOffset,new Mouse.MoveOptions().setSteps(18));
-    page.mouse().up();
-    System.out.println(engine+" "+source+" -> "+target+": "+page.locator("#status").innerText());
-    page.screenshot(new Page.ScreenshotOptions().setPath(Path.of("target/"+engine+"-"+target.substring(1)+".png")));
+    if (touchInput) {
+      CDPSession session = page.context().newCDPSession(page);
+      double x = a.x + a.width / 2;
+      double y = a.y + a.height / 2;
+      touch(session, "touchStart", x, y);
+      for (int step = 1; step <= 20; step++) {
+        touch(session, "touchMove", x + (b.x + b.width / 2 - x) * step / 20,
+            y + (b.y + yOffset - y) * step / 20);
+      }
+      touch(session, "touchEnd", 0, 0);
+      session.detach();
+    } else {
+      page.mouse().move(a.x+a.width/2,a.y+a.height/2);
+      page.mouse().down();
+      page.mouse().move(a.x+a.width/2+12,a.y+a.height/2+12,new Mouse.MoveOptions().setSteps(3));
+      page.mouse().move(b.x+b.width/2,b.y+yOffset,new Mouse.MoveOptions().setSteps(18));
+      page.mouse().up();
+    }
+    System.out.println(engine+" touch="+touchInput+" "+source+" -> "+target+": "+page.locator("#status").innerText());
+    page.screenshot(new Page.ScreenshotOptions().setPath(Path.of("target/"+engine+"-touch-"+touchInput+"-"+target.substring(1)+".png")));
+  }
+  // Chromium's input protocol creates trusted touch input through the browser's event pipeline.
+  private static void touch(CDPSession session, String type, double x, double y) {
+    JsonObject parameters = new JsonObject();
+    parameters.addProperty("type", type);
+    JsonArray points = new JsonArray();
+    if (!type.equals("touchEnd")) {
+      JsonObject point = new JsonObject();
+      point.addProperty("x", x);
+      point.addProperty("y", y);
+      point.addProperty("id", 0);
+      points.add(point);
+    }
+    parameters.add("touchPoints", points);
+    session.send("Input.dispatchTouchEvent", parameters);
   }
   private void healthy(){ assertTrue("Browser errors: "+errors,errors.isEmpty()); }
   @Test public void movesBetweenColumnsAndReportsCompletion() {
@@ -66,6 +100,9 @@ public class DragDropIT {
     page.waitForSelector("#done #alpha");
     assertEquals("Moved alpha",page.locator("#status").innerText());
     assertEquals("1",page.locator("#status").getAttribute("data-completed"));
+    if (touchInput) {
+      page.waitForFunction("document.querySelector('#alpha-handle').dataset.forwardedTouches === '1:0'");
+    }
     healthy();
   }
   @Test public void reordersWithinAColumn() {
