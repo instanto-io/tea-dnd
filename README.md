@@ -201,7 +201,7 @@ showcase, browser checks and documentation.
 Distributed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for attribution.
 
 
-## Help and support
+## Questions and bug reports
 
 For questions, bug reports or feature requests about this port, use the
 [Tea DnD issue tracker](https://github.com/instanto-io/tea-dnd/issues). Please include whether
@@ -210,6 +210,8 @@ you are using GWT or TeaVM, your browser version and a small example of the prob
 The original project points users to the [GWT-DnD discussion group](https://groups.google.com/g/gwt-dnd).
 Its existing discussions can help explain the original API. GWT-DnD is archived and no longer
 maintained, so please direct issues with Tea DnD to our tracker.
+
+## Support development
 
 You can [sponsor Instanto’s maintenance of this port](https://github.com/sponsors/instanto-io).
 If you use the TeaVM build, you can also [support TeaVM and its author, Alexey Andreev](https://github.com/sponsors/konsoletyper).
