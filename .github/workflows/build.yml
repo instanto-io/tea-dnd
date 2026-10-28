@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: instanto-io/teavm-compat
-          ref: 5be8edb53148981e8e4a92268cbf94c1f7659822
+          ref: 24410a37f439bdc0ec99541e60d3863d4d7ea272
           path: .compat-baseline
       - name: Build compatibility baseline
         run: mvn -s "$GITHUB_WORKSPACE/.github/maven-settings.xml" -f .compat-baseline/pom.xml -B -ntp -Dmaven.repo.local="$MAVEN_CACHE" -pl gwt-user-compat -am install -DskipTests
