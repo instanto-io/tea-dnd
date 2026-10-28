@@ -191,9 +191,26 @@ board and inspect its Java callbacks. The shared example source is in
 
 ## Upstream and licence
 
-Tea DnD is based on GWT-DnD at commit `66cf6881542cf9e2ae64cf74e9f5761101969ebd`.
+Tea DnD builds on [GWT-DnD](https://github.com/fredsa/gwt-dnd), created by
+[Fred Sauer](https://github.com/fredsa) and its contributors. The controller design and
+original implementation come from their work. This port starts at commit `66cf6881542cf9e2ae64cf74e9f5761101969ebd`.
 The upstream Git history, copyright headers and attribution are retained. Instanto’s changes
 include the Maven modules, TeaVM adaptation, modern browser strategy, embedded resource provider,
 showcase, browser checks and documentation.
 
 Distributed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for attribution.
+
+
+## Help and support
+
+For questions, bug reports or feature requests about this port, use the
+[Tea DnD issue tracker](https://github.com/instanto-io/tea-dnd/issues). Please include whether
+you are using GWT or TeaVM, your browser version and a small example of the problem.
+
+The original project points users to the [GWT-DnD discussion group](https://groups.google.com/g/gwt-dnd).
+Its existing discussions can help explain the original API. GWT-DnD is archived and no longer
+maintained, so please direct issues with Tea DnD to our tracker.
+
+You can [sponsor Instanto’s maintenance of this port](https://github.com/sponsors/instanto-io).
+If you use the TeaVM build, you can also [support TeaVM and its author, Alexey Andreev](https://github.com/sponsors/konsoletyper).
+These are separate projects; sponsoring Instanto funds our maintenance work.
