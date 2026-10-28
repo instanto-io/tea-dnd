@@ -1,0 +1,1 @@
+<module rename-to="showcase"><inherits name="com.allen_sauer.gwt.dnd.Dnd"/><source path="demo"/><set-property name="user.agent" value="safari"/><entry-point class="io.instanto.dnd.demo.GwtMain"/></module>

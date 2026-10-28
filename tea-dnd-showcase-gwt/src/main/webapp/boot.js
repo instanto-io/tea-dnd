@@ -1,0 +1,1 @@
+var script=document.createElement('script'); script.src='showcase/showcase.nocache.js'; document.head.appendChild(script);

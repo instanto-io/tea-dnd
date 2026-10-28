@@ -1,19 +1,6 @@
-#Sublime
-gwt-dnd.sublime-workspace
-
-# GWT Cache
-gwt-unitCache/
-
-# App Engine SDK
-appengine-api-1.0-sdk-*.jar
-appengine-api-labs.jar
-appengine-endpoints.jar
-appengine-jsr107cache-*.jar
-gwt-servlet.jar
-jsr107cache-1.1.jar
-
-# GWT SDK
-gwt-servlet.jar
-
-# OS-X
+**/target/
+.idea/
+*.iml
 .DS_Store
+
+.compat-baseline/

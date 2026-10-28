@@ -1,0 +1,1 @@
+var script=document.createElement('script'); script.src='app.js'; script.onload=function(){main();}; document.head.appendChild(script);
