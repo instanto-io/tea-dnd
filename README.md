@@ -193,6 +193,12 @@ For GWT, use `tea-dnd-showcase-gwt/target/site` instead. Open `http://localhost:
 board and inspect its Java callbacks. The shared example source is in
 [`Showcase.java`](showcase/src/main/java/io/instanto/dnd/demo/Showcase.java).
 
+## Quality
+
+SpotBugs runs on every build. High-priority findings fail the build, and all findings are published to [code scanning](https://github.com/instanto-io/tea-dnd/security/code-scanning). SonarQube analysis runs on `main` against the organisation's private instance; maintainers see the gate, coverage and issue counts in the workflow summary. The Sonar quality gate is advisory, so a snapshot still publishes when only that gate fails.
+
+See [Actions](https://github.com/instanto-io/tea-dnd/actions) for the latest verification and quality summary.
+
 ## Upstream and licence
 
 Tea DnD builds on [GWT-DnD](https://github.com/fredsa/gwt-dnd), created by
