@@ -21,14 +21,22 @@ package com.allen_sauer.gwt.dnd.client;
 public class DragHandlerAdapter implements DragHandler {
 
   @Override
-  public void onDragEnd(DragEndEvent event) {}
+  public void onDragEnd(DragEndEvent event) {
+    // Subclasses can react when a drag ends.
+  }
 
   @Override
-  public void onDragStart(DragStartEvent event) {}
+  public void onDragStart(DragStartEvent event) {
+    // Subclasses can react when a drag starts.
+  }
 
   @Override
-  public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {}
+  public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {
+    // Allow the drag to end by default.
+  }
 
   @Override
-  public void onPreviewDragStart(DragStartEvent event) throws VetoDragException {}
+  public void onPreviewDragStart(DragStartEvent event) throws VetoDragException {
+    // Allow the drag to start by default.
+  }
 }
