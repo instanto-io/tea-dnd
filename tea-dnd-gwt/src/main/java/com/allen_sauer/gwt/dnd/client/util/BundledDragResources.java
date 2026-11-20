@@ -44,50 +44,50 @@ public final class BundledDragResources implements DragClientBundle {
 }
 
 .dragdrop-handle {
-	cursor: move;
-	user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
+\tcursor: move;
+\tuser-select: none;
+\t-khtml-user-select: none;
+\t-moz-user-select: none;
 }
 
 .dragdrop-draggable {
-	zoom: 1; /* IE gain hasLayout */
+\tzoom: 1; /* IE gain hasLayout */
 }
 
 .dragdrop-dragging {
-	zoom: normal; /* remove artifacts */
+\tzoom: normal; /* remove artifacts */
 }
 
 .dragdrop-positioner {
-	border: 1px dashed #1E90FF; /* blue */
-	margin: 0px !important;
-	zoom: 1; /* IE gain hasLayout */
-	z-index: 100;
+\tborder: 1px dashed #1E90FF; /* blue */
+\tmargin: 0px !important;
+\tzoom: 1; /* IE gain hasLayout */
+\tz-index: 100;
 }
 
 .dragdrop-flow-panel-positioner {
-	color: #1E90FF; /* blue */
-	display: inline;
-	text-align: center;
-	vertical-align: middle;
+\tcolor: #1E90FF; /* blue */
+\tdisplay: inline;
+\ttext-align: center;
+\tvertical-align: middle;
 }
 
 .dragdrop-proxy {
-	background-color: #77AAFF; /* light blue */
+\tbackground-color: #77AAFF; /* light blue */
 }
 
 .dragdrop-selected,.dragdrop-dragging,.dragdrop-proxy {
-	-webkit-filter: opacity(.3);
-	-moz-opacity: 0.3;
-	-khtml-opacity: 0.3;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
-	opacity: 0.3;
+\t-webkit-filter: opacity(.3);
+\t-moz-opacity: 0.3;
+\t-khtml-opacity: 0.3;
+\t-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+\topacity: 0.3;
 }
 
 .dragdrop-movable-panel {
-	z-index: 200;
-	margin: 0px !important;
-	border: none !important;
+\tz-index: 200;
+\tmargin: 0px !important;
+\tborder: none !important;
 }
 """;
         }
