@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 /** Provides DOM utility methods. */
 public class DOMUtil {
+  private static final String GREEN_DEBUG_BORDER_COLOR = "green";
 
   /** Whether or not debugging is enabled. */
   public static final boolean DEBUG = false;
@@ -115,49 +116,49 @@ public class DOMUtil {
       Widget widget = parent.getWidget(mid);
       WidgetArea midArea = new WidgetArea(widget, null);
       if (mid == low) {
-        if (mid == 0) {
-          if (comparator.locationIndicatesIndexFollowingWidget(midArea, location)) {
-            debugWidgetWithColor(parent, high, "green");
-            return high;
-          } else {
-            debugWidgetWithColor(parent, mid, "green");
-            return mid;
-          }
-        } else {
-          debugWidgetWithColor(parent, high, "green");
-          return high;
-        }
+        int insertion = mid == 0 ? insertionAt(midArea, location, comparator, mid) : high;
+        return highlightInsertion(parent, insertion);
       }
-      if (midArea.getBottom() < location.getTop()) {
-        debugWidgetWithColor(parent, mid, "blue");
+      int order = compareToLocation(parent, mid, midArea, location, rtl);
+      if (order < 0) {
         low = mid;
-      } else if (midArea.getTop() > location.getTop()) {
-        debugWidgetWithColor(parent, mid, "red");
+      } else if (order > 0) {
         high = mid;
-      } else if (midArea.getRight() < location.getLeft()) {
-        debugWidgetWithColor(parent, mid, "blue");
-        if (rtl) {
-          high = mid;
-        } else {
-          low = mid;
-        }
-      } else if (midArea.getLeft() > location.getLeft()) {
-        debugWidgetWithColor(parent, mid, "red");
-        if (rtl) {
-          low = mid;
-        } else {
-          high = mid;
-        }
       } else {
-        if (comparator.locationIndicatesIndexFollowingWidget(midArea, location)) {
-          debugWidgetWithColor(parent, mid + 1, "green");
-          return mid + 1;
-        } else {
-          debugWidgetWithColor(parent, mid, "green");
-          return mid;
-        }
+        return highlightInsertion(parent, insertionAt(midArea, location, comparator, mid));
       }
     }
+  }
+
+  private static int compareToLocation(
+      IndexedPanel parent, int index, WidgetArea widget, Location location, boolean rtl) {
+    if (widget.getBottom() < location.getTop()) {
+      debugWidgetWithColor(parent, index, "blue");
+      return -1;
+    }
+    if (widget.getTop() > location.getTop()) {
+      debugWidgetWithColor(parent, index, "red");
+      return 1;
+    }
+    if (widget.getRight() < location.getLeft()) {
+      debugWidgetWithColor(parent, index, "blue");
+      return rtl ? 1 : -1;
+    }
+    if (widget.getLeft() > location.getLeft()) {
+      debugWidgetWithColor(parent, index, "red");
+      return rtl ? -1 : 1;
+    }
+    return 0;
+  }
+
+  private static int insertionAt(
+      WidgetArea widget, Location location, LocationWidgetComparator comparator, int index) {
+    return comparator.locationIndicatesIndexFollowingWidget(widget, location) ? index + 1 : index;
+  }
+
+  private static int highlightInsertion(IndexedPanel parent, int index) {
+    debugWidgetWithColor(parent, index, GREEN_DEBUG_BORDER_COLOR);
+    return index;
   }
 
   public static boolean isRtl(Widget widget) {
