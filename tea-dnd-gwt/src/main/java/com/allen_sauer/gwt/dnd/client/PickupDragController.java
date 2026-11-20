@@ -39,6 +39,8 @@ import java.util.HashMap;
  * @see #registerDropController(DropController)
  */
 public class PickupDragController extends AbstractDragController {
+  private static final String MARGIN_PROPERTY = "margin";
+
   /** Private implementation class to store widget information while dragging. */
   private static class SavedWidgetInfo {
 
@@ -405,7 +407,7 @@ public class PickupDragController extends AbstractDragController {
   protected void restoreSelectedWidgetsStyle() {
     for (Widget widget : context.selectedWidgets) {
       SavedWidgetInfo info = savedWidgetInfoMap.get(widget);
-      widget.getElement().getStyle().setProperty("margin", info.initialDraggableMargin);
+      widget.getElement().getStyle().setProperty(MARGIN_PROPERTY, info.initialDraggableMargin);
     }
   }
 
@@ -438,8 +440,8 @@ public class PickupDragController extends AbstractDragController {
                 + " and override saveSelectedWidgetsLocationAndStyle(), restoreSelectedWidgetsLocation() and restoreSelectedWidgetsStyle()");
       }
 
-      info.initialDraggableMargin = DOM.getStyleAttribute(widget.getElement(), "margin");
-      widget.getElement().getStyle().setProperty("margin", "0px");
+      info.initialDraggableMargin = DOM.getStyleAttribute(widget.getElement(), MARGIN_PROPERTY);
+      widget.getElement().getStyle().setProperty(MARGIN_PROPERTY, "0px");
       savedWidgetInfoMap.put(widget, info);
     }
   }
