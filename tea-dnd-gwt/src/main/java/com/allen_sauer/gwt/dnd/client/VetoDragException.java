@@ -22,5 +22,7 @@ package com.allen_sauer.gwt.dnd.client;
 public class VetoDragException extends Exception {
 
   /** Default constructor. */
-  public VetoDragException() {}
+  public VetoDragException() {
+    super();
+  }
 }
